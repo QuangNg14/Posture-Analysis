@@ -1,11 +1,10 @@
-from flask import Flask, render_template, Response, request, redirect
+from flask import Flask, render_template, Response, request
 import cv2
 import datetime
 import time
 import os
 import sys
 import numpy as np
-import pyrebase
 from threading import Thread
 
 
@@ -102,64 +101,13 @@ def gen_frames():  # generate frame by frame from camera
             pass
 
 
-firebaseConfig = {
-    "apiKey": "AIzaSyCDxKa-AEKeqm-nFyFDh3u9j00rS_tNzqE",
-    "authDomain": "posture-analytics.firebaseapp.com",
-    "projectId": "posture-analytics",
-    "storageBucket": "posture-analytics.appspot.com",
-    "messagingSenderId": "993803643647",
-    "appId": "1:993803643647:web:9c6beaa9367a66f6c83aca",
-    "databaseURL": "",
-}
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
-
-
-@app.route('/', methods=['GET', 'POST'])
-def basic():
-    unsuccessful = 'Please check your credentials'
-    successful = 'Login successful'
-    if request.method == 'POST':
-        email = request.form['name']
-        password = request.form['pass']
-        try:
-            auth.sign_in_with_email_and_password(email, password)
-            return redirect("/index")
-        except:
-            return render_template('auth.html', us=unsuccessful)
-
-    return render_template('auth.html')
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def basic2():
-    unsuccessful = 'Please check your credentials'
-    successful = 'Login successful'
-    if request.method == 'POST':
-        email = request.form['name']
-        password = request.form['pass']
-        try:
-            auth.create_user_with_email_and_password(email, password)
-            return redirect("/")
-        except:
-            return render_template('signup.html', us=unsuccessful)
-
-    return render_template('signup.html')
-
-
-@app.route('/index')
+@app.route('/')
 def index():
-    return render_template('index.html')
+  return render_template('front-end.html')
 
-
-@app.route('/pose_detect')
-def pose():
-    # link the button to this route
-    # call machine learning process
-    # render new html with the results on it
-    return
-
+@app.route('/record')
+def record():
+  return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -202,7 +150,7 @@ def tasks():
                 frame_height = int(camera.get(4))
                 now = datetime.datetime.now()
                 fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
-                out = cv2.VideoWriter('vid_{}.avi'.format(
+                out = cv2.VideoWriter("vid_{}.avi".format(
                     str(now).replace(":", '')), fourcc, 20.0, (frame_width, frame_height))
                 # Start new thread for recording the video
                 thread = Thread(target=record, args=[out, ])
@@ -216,7 +164,7 @@ def tasks():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 camera.release()
 cv2.destroyAllWindows()

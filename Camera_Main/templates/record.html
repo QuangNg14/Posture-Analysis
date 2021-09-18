@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/css/new.css">
+    <title>Do It Right!</title>
+  </head>
+  <body>
+  <div id="whole-page">
+  <div class="container-fluid" id="whole-page">
+    <div class="row">
+      <div class="col-lg-8  offset-lg-2">
+        <h2 class="mt-5">Do It Right!</h2>
+        <div class="row">
+          Video
+        </div>
+        <div class="row">
+          <button>
+            Start Exercising
+          </button>
+        </div>
+        <form method="post" action="{{ url_for('tasks') }}">
+        <input type="submit" value="Stop/Start" name="stop" />
+        <input type="submit" value="Capture" name="click"/>
+        <input type="submit" value="Grey" name="grey" />
+        <input type="submit" value="Negative" name="neg" />
+        <input type="submit" value="Face Only" name="face" />
+        <input type="submit" value="Start/Stop Recording" name="rec" />
+        </form>
+        <img src="{{ url_for('video_feed') }}" height="80%">
+        <!-- <h3 style="font-family:courier;">Instructions:</h3>
+        <ol style="font-family:courier;">
+          <li>Stop/Start--Toggle between stop or start live streaming</li>
+          <li>Capture--Take still-shot and save in the 'shots' directory</li>
+          <li>Grey--Toggle between grayscale and RGB output</li>
+          <li>Negative--Toggle between negative and RGB output</li>
+          <li>Face Only--Shows just your face if present(Toggle on/off)</li> 
+          <li>Start/Stop Recording--Toggle between starting and stopping video recording</li> 
+        </ol>	 -->
+      </div>
+    </div>
+  </div>
+  </div>
+  <script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+  crossorigin="anonymous"
+  >
+  </script>
+  </body>
+</html>
