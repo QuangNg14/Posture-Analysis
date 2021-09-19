@@ -114,7 +114,7 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/front_end')
+@app.route('/home')
 def front_end():
     return render_template("front-end.html")
 
