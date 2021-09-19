@@ -114,6 +114,16 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+@app.route('/front_end')
+def front_end():
+    return render_template("front-end.html")
+
+
+@app.route('/record')
+def record():
+    return render_template("index.html")
+
+
 @app.route('/requests', methods=['POST', 'GET'])
 def tasks():
     global switch, camera
@@ -242,7 +252,7 @@ def pose():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 camera.release()
 cv2.destroyAllWindows()
