@@ -13,10 +13,10 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 storage = firebase.storage()
 
-# path_on_cloud = "videos/test-vid"
-# path_local = "vid_2021-09-18 023744.313159.avi"
-# storage.child(path_on_cloud).put(path_local)
+path_on_cloud = "videos/pose1_demo"
+path_local = "./videos/pose1_demo.mp4"
+storage.child(path_on_cloud).put(path_local)
 
-link = storage.child("images/test-shot").get_url(None)
-print(link)
+# link = storage.child("images/test-shot").get_url(None)
+# print(link)
 # https://firebasestorage.googleapis.com/v0/b/storage-url.appspot.com/o/images%2Fexample.jpg?alt=media

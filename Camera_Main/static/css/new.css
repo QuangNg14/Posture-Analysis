@@ -9,6 +9,16 @@
   object-fit: cover;
 }
 
+.exercise-head {
+  width: 100%;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #1aa3ff;
+  color: white;
+}
+
 #welcome-block,
 .exercise-header {
   display: flex;

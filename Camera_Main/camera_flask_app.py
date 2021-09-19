@@ -30,7 +30,8 @@ net = cv2.dnn.readNetFromCaffe('./saved_model/deploy.prototxt.txt',
                                './saved_model/res10_300x300_ssd_iter_140000.caffemodel')
 
 # instatiate flask app
-app = Flask(__name__, template_folder='./templates')
+app = Flask(__name__,
+            template_folder='./templates')
 
 
 camera = cv2.VideoCapture(0)
@@ -119,9 +120,39 @@ def front_end():
     return render_template("front-end.html")
 
 
-@app.route('/record')
-def record():
-    return render_template("record.html")
+@app.route('/record_plank')
+def record1():
+    return render_template("record_plank.html")
+
+
+@app.route('/record_goddness')
+def record2():
+    return render_template("record_goddness.html")
+
+
+@app.route('/record_pushup')
+def record3():
+    return render_template("record_tree.html")
+
+
+@app.route('/record_warrior2')
+def record4():
+    return render_template("record_warrior2.html")
+
+
+@app.route('/record_tree')
+def record5():
+    return render_template("record_tree.html")
+
+
+@app.route('/record_downdog')
+def record6():
+    return render_template("record_downdog.html")
+
+
+@app.route('/record_wakanda')
+def record7():
+    return render_template("record_wakanda.html")
 
 
 @app.route('/requests', methods=['POST', 'GET'])

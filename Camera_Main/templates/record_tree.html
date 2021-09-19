@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/css/new.css">
+    <title>PoseLively.AI!</title>
+  </head>
+  <body>
+  <div id="whole-page">
+  <div class="container-fluid" id="whole-page">
+    <!-- <div class="row">
+      <div class="col-lg-8  offset-lg-2"> -->
+        <div class="row exercise-header">
+          <div class="exercise-head">
+            Exercise Lesson: Tree Move
+          </div>
+        </div>
+        <div class="card" style="margin-bottom: 10px;">
+          <div class="card-body">
+            Hold for 10 to 20 seconds, about three to eight breaths. With practice, you might work up to a minute on each side. Vrksasana strengthens and tones the legs and feet, opens the hips, groins, and chest, and fortifies your Muladhara (first or “root”) Chakra.          </div>
+        </div>
+        <div class="row" >
+          <div class="col ref-video">
+            <h4>Instruction Video</h4>
+            <iframe src="https://www.youtube.com/embed/wdln9qWYloU" width = "100%" height="100%"> 
+            </iframe>
+          </div>
+          <div class="col ref-video" >
+            <h4>Analyzed Video</h4>
+            <video width="100%" height="100%" controls>
+              <source src="static/videos/pose9_demo.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" >
+            <h4>Start Exercising!</h4>
+            <form method="post" action="{{ url_for('tasks') }}">
+              <input class="btn btn-primary" style="margin-bottom: 20px;"type="submit" value="Start/Stop Recording" name="rec" />
+            </form>
+            <img src="{{ url_for('video_feed') }}" height="80%" width="100%">
+          </div>
+        </div>
+      <!-- </div>
+    </div> -->
+  </div>
+  </div>
+  <script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+  crossorigin="anonymous"
+  >
+  </script>
+  </body>
+</html>
