@@ -1,11 +1,27 @@
-
 <body>
+<div id="whole-page">
 <div class="container">
+    <div class="row exercise-header">
+      <div class="exercise-header">
+        Exercise Type
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col">
+        <iframe src=""> 
+          Professional Video
+        </iframe>
+      </div>
+      <div class="col">
+        <iframe src="">
+          Analyzed Video
+        </iframe>
+      </div>
+    </div>
     <div class="row">
         <div class="col-lg-8  offset-lg-2">
-
-			
-            <h2 class="mt-5">CAMERA APP</h2>
+          <h2 class="mt-5">CAMERA APP</h2>
+        </div>
 			<form method="post" action="{{ url_for('tasks') }}">
 			<input type="submit" value="Stop/Start" name="stop" />
 			<input type="submit" value="Capture" name="click"/>
@@ -28,5 +44,6 @@
 			
         </div>
     </div>
+</div>
 </div>
 </body>

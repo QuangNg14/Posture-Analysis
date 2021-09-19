@@ -120,8 +120,8 @@ def front_end():
 
 
 @app.route('/record')
-def record(id):
-    return render_template("index.html")
+def record():
+    return render_template("record.html")
 
 
 @app.route('/requests', methods=['POST', 'GET'])
@@ -170,8 +170,8 @@ def tasks():
         elif request.form.get('active_model') == 'Stop Recording':
             return redirect('/pose_detect')
     elif request.method == 'GET':
-        return render_template('index.html')
-    return render_template('index.html')
+        return render_template('record.html')
+    return render_template('record.html')
 
 
 @app.route('/pose_detect')
