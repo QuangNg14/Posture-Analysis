@@ -5,8 +5,10 @@ import time
 import os
 import sys
 import numpy as np
-import pyrebase
 from threading import Thread
+import mediapipe as mp
+import pandas as pd
+import pickle
 
 
 global capture, rec_frame, grey, switch, neg, face, rec, out
@@ -102,63 +104,9 @@ def gen_frames():  # generate frame by frame from camera
             pass
 
 
-firebaseConfig = {
-    "apiKey": "AIzaSyCDxKa-AEKeqm-nFyFDh3u9j00rS_tNzqE",
-    "authDomain": "posture-analytics.firebaseapp.com",
-    "projectId": "posture-analytics",
-    "storageBucket": "posture-analytics.appspot.com",
-    "messagingSenderId": "993803643647",
-    "appId": "1:993803643647:web:9c6beaa9367a66f6c83aca",
-    "databaseURL": "",
-}
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
-
-
-@app.route('/', methods=['GET', 'POST'])
-def basic():
-    unsuccessful = 'Please check your credentials'
-    successful = 'Login successful'
-    if request.method == 'POST':
-        email = request.form['name']
-        password = request.form['pass']
-        try:
-            auth.sign_in_with_email_and_password(email, password)
-            return redirect("/index")
-        except:
-            return render_template('auth.html', us=unsuccessful)
-
-    return render_template('auth.html')
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def basic2():
-    unsuccessful = 'Please check your credentials'
-    successful = 'Login successful'
-    if request.method == 'POST':
-        email = request.form['name']
-        password = request.form['pass']
-        try:
-            auth.create_user_with_email_and_password(email, password)
-            return redirect("/")
-        except:
-            return render_template('signup.html', us=unsuccessful)
-
-    return render_template('signup.html')
-
-
-@app.route('/index')
+@app.route('/')
 def index():
     return render_template('index.html')
-
-
-@app.route('/pose_detect')
-def pose():
-    # link the button to this route
-    # call machine learning process
-    # render new html with the results on it
-    return
 
 
 @app.route('/video_feed')
@@ -202,17 +150,95 @@ def tasks():
                 frame_height = int(camera.get(4))
                 now = datetime.datetime.now()
                 fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
-                out = cv2.VideoWriter('vid_{}.avi'.format(
+                out = cv2.VideoWriter("videos/vid_{}.avi".format(
                     str(now).replace(":", '')), fourcc, 20.0, (frame_width, frame_height))
                 # Start new thread for recording the video
                 thread = Thread(target=record, args=[out, ])
                 thread.start()
             elif(rec == False):
                 out.release()
-
+        elif request.form.get('active_model') == 'Stop Recording':
+            return redirect('/pose_detect')
     elif request.method == 'GET':
         return render_template('index.html')
     return render_template('index.html')
+
+
+@app.route('/pose_detect')
+def pose():
+    # initiate mediapipe
+    mp_drawing = mp.solutions.drawing_utils  # mediapipe drawing :D
+    mp_pose = mp.solutions.pose  # mediapipe pose class.
+    # Setting up the Pose function.
+    pose = mp_pose.Pose(static_image_mode=True,
+                        min_detection_confidence=0.3, model_complexity=2)
+
+    with open('wakandaRaisingHands_rf.pkl', 'rb') as f:
+        model = pickle.load(f)
+
+    input_video_path = 'videos/test.avi'
+    cap = cv2.VideoCapture(input_video_path)
+# Setup mediapipe instance
+    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        while cap.isOpened():
+            ret, frame = cap.read()
+
+            # Recolor image to RGB
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            image.flags.writeable = False
+
+            # Make detection
+            results = pose.process(image)
+
+            # Recolor back to BGR
+            image.flags.writeable = True
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+            # Extract landmarks
+            try:
+                landmarks = results.pose_landmarks.landmark
+                landmarks_row = list(np.array(
+                    [[landmark.x, landmark.y, landmark.z, landmark.visibility] for landmark in landmarks]).flatten())
+
+                # Make Detections
+                X = pd.DataFrame([landmarks_row])
+                body_language_class = model.predict(X)[0]
+                body_language_prob = model.predict_proba(X)[0]
+                print(body_language_class, body_language_prob)
+
+                # Get status box
+                cv2.rectangle(image, (0, 0), (250, 60), (245, 117, 16), -1)
+
+                # Display Classification
+                cv2.putText(image, 'CLASS', (95, 12),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                cv2.putText(image, body_language_class.split(' ')[
+                            0], (90, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+                # Display Probability
+                cv2.putText(image, 'PROB', (15, 12),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                cv2.putText(image, str(round(body_language_prob[np.argmax(body_language_prob)], 2)), (
+                    10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+            except:
+                pass
+
+            # Render detections
+            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                      mp_drawing.DrawingSpec(
+                                          color=(245, 117, 66), thickness=2, circle_radius=2),
+                                      mp_drawing.DrawingSpec(
+                                          color=(245, 66, 230), thickness=2, circle_radius=2)
+                                      )
+
+            cv2.imshow('Mediapipe Feed', image)
+
+            if cv2.waitKey(10) & 0xFF == ord('q'):
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
