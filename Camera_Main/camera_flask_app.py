@@ -120,7 +120,7 @@ def front_end():
 
 
 @app.route('/record')
-def record():
+def record(id):
     return render_template("index.html")
 
 
