@@ -51,3 +51,9 @@
   background: white;
   border-color: red;
 }
+
+.info-card {
+  width: 19rem;
+  margin-top: 20px;
+  height: 30rem;
+}
