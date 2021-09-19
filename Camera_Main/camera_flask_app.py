@@ -191,7 +191,7 @@ def tasks():
                 frame_height = int(camera.get(4))
                 now = datetime.datetime.now()
                 fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
-                out = cv2.VideoWriter("videos/vid_{}.avi".format(
+                out = cv2.VideoWriter("/static/videos/vid_{}.avi".format(
                     str(now).replace(":", '')), fourcc, 20.0, (frame_width, frame_height))
                 # Start new thread for recording the video
                 thread = Thread(target=record, args=[out, ])
@@ -214,10 +214,10 @@ def pose():
     pose = mp_pose.Pose(static_image_mode=True,
                         min_detection_confidence=0.3, model_complexity=2)
 
-    with open('wakandaRaisingHands_rf.pkl', 'rb') as f:
+    with open('yoga_xgb.pkl', 'rb') as f:
         model = pickle.load(f)
 
-    input_video_path = 'videos/test.avi'
+    input_video_path = '/static/videos/pose1_demo.mp4'
     cap = cv2.VideoCapture(input_video_path)
 # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
