@@ -125,9 +125,9 @@ def record1():
     return render_template("record_plank.html")
 
 
-@app.route('/record_goddness')
+@app.route('/record_goddess')
 def record2():
-    return render_template("record_goddness.html")
+    return render_template("record_goddess.html")
 
 
 @app.route('/record_pushup')
@@ -201,8 +201,8 @@ def tasks():
         elif request.form.get('active_model') == 'Stop Recording':
             return redirect('/pose_detect')
     elif request.method == 'GET':
-        return render_template('record.html')
-    return render_template('record.html')
+        return render_template('record_plank.html')
+    return render_template('record_plank.html')
 
 
 @app.route('/pose_detect')
